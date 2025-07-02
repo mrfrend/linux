@@ -1,0 +1,84 @@
+{
+    "additional-repositories": [],
+    "archinstall-language": "English",
+    "audio": "pipewire",
+    "bootloader": "grub-install",
+    "debug": false,
+    "desktop-environment": "gnome",
+    "dry-run": false,
+    "gfx_driver": "All open-source (default)",
+    "harddrives": [
+        "/dev/sda"
+    ],
+    "hostname": "archexam",
+    "install": [
+        "firefox",
+        "git",
+        "wget",
+        "base-devel",
+        "virtualbox-guest-utils"
+    ],
+    "kernels": [
+        "linux"
+    ],
+    "keyboard-layout": "us",
+    "mirror-region": {
+        "Worldwide": {
+            "https://geo.mirror.pkgbuild.com/$repo/os/$arch": true
+        }
+    },
+    "network_configuration": {
+        "type": "nm"
+    },
+    "no_pkg_lookups": false,
+    "ntp": true,
+    "offline": false,
+    "packages": [
+        "nano",
+        "vim",
+        "openssh",
+        "networkmanager",
+        "firefox"
+    ],
+    "parallel downloads": 5,
+    "profile": {
+        "path": "/usr/lib/python3.12/site-packages/archinstall/profiles/desktop.py"
+    },
+    "script": "guided",
+    "silent": false,
+    "swap": false,
+    "sys-encoding": "utf-8",
+    "sys-language": "en_US",
+    "timezone": "Europe/Moscow",
+    "version": "2.7.0",
+    "disk_config": {
+        "config_type": "default_layout",
+        "device_modifications": [
+            {
+                "device": "/dev/sda",
+                "wipe": true,
+                "partitions": [
+                    {
+                        "boot": true,
+                        "encrypted": false,
+                        "filesystem": {
+                            "format": "fat32"
+                        },
+                        "mountpoint": "/boot",
+                        "size": "512MiB",
+                        "type": "primary"
+                    },
+                    {
+                        "encrypted": false,
+                        "filesystem": {
+                            "format": "ext4"
+                        },
+                        "mountpoint": "/",
+                        "size": "100%",
+                        "type": "primary"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,6 @@
+work/
+out/
+*.iso
+*.log
+.DS_Store
+archlinux-2025.06.01-x86_64.iso

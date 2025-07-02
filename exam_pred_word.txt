@@ -1,0 +1,216 @@
+РУКОВОДСТВО ПОЛЬЗОВАТЕЛЯ
+Настройка и администрирование операционной системы Ubuntu
+
+Выполнил: [ФИО]
+Группа: [Номер группы]
+Дата: [Дата]
+
+СОДЕРЖАНИЕ
+
+1. Введение
+2. Запуск экзаменационного тренажёра
+3. Базовая настройка и обновление
+4. Настройка виртуального принтера
+5. Резервное копирование системы
+6. Управление пользователями и группами
+7. Настройка сетевых служб
+8. Мониторинг системы
+9. Создание ISO-образа
+10. Заключение
+
+================================================================================
+
+1. ВВЕДЕНИЕ
+
+Данное руководство описывает процесс настройки и администрирования операционной системы Ubuntu с помощью интерактивного скрипта exam.sh. Руководство предназначено для пользователей, которым необходимо выполнить базовую настройку системы и основные административные задачи в рамках экзаменационного задания.
+
+Цель работы: продемонстрировать навыки администрирования Linux-системы, настройки служб, управления пользователями и создания резервных копий.
+
+================================================================================
+
+2. ЗАПУСК ЭКЗАМЕНАЦИОННОГО ТРЕНАЖЁРА
+
+2.1. Подготовка среды
+
+- Оперативная память: 4096 МБ
+- Жесткий диск: 25 ГБ
+- Видеопамять: 128 МБ
+- Сетевые адаптеры: NAT + Сетевой мост
+
+2.2. Запуск скрипта exam.sh
+
+Скачайте и запустите скрипт:
+
+wget https://raw.githubusercontent.com/Leevandr/rtask/main/exam.sh
+chmod +x exam.sh
+./exam.sh
+
+Скрипт предоставляет меню с заданиями. Можно выполнять задания по одному или выбрать автоматический режим (A).
+
+================================================================================
+
+3. БАЗОВАЯ НАСТРОЙКА И ОБНОВЛЕНИЕ
+
+3.1. Обновление системы
+
+sudo apt update && sudo apt upgrade -y
+
+3.2. Установка базового программного обеспечения
+
+sudo apt install -y firefox chromium-browser libreoffice gimp inkscape vlc mpv git wget curl htop neofetch mc ranger zip unzip p7zip-full ntfs-3g dosfstools
+
+3.3. Проверка сети
+
+ip addr
+ping google.com
+
+================================================================================
+
+4. НАСТРОЙКА ВИРТУАЛЬНОГО ПРИНТЕРА
+
+4.1. Установка CUPS и PDF-принтера
+
+sudo apt install -y cups cups-pdf ghostscript
+sudo systemctl enable cups.service
+sudo systemctl start cups.service
+
+4.2. Настройка принтера через веб-интерфейс
+
+- Откройте браузер и перейдите по адресу http://localhost:631
+- Добавьте принтер CUPS-PDF (Virtual PDF Printer)
+- Укажите имя: PDF, поставьте галочку "Share This Printer"
+- Выберите Make: Generic, Model: Generic CUPS-PDF Printer
+- Протестируйте печать (файлы сохраняются в ~/PDF)
+
+================================================================================
+
+5. РЕЗЕРВНОЕ КОПИРОВАНИЕ СИСТЕМЫ
+
+5.1. Создание точки восстановления Timeshift
+
+sudo apt install -y timeshift || sudo snap install timeshift
+sudo timeshift-gtk
+
+- Выберите тип снимков: RSYNC
+- Выберите диск для снимков (обычно /)
+- Создайте снимок вручную
+
+5.2. Резервное копирование с помощью Borg
+
+sudo apt install -y borgbackup vorta || sudo snap install borgbackup vorta
+mkdir ~/backup-exam
+borg init --encryption=none ~/backup-exам
+borg create ~/backup-exam::exam-backup ~/Documents
+
+================================================================================
+
+6. УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯМИ И ГРУППАМИ
+
+6.1. Создание групп
+
+sudo groupadd students
+groupadd developers
+groupadd managers
+
+6.2. Создание пользователей
+
+sudo useradd -m -G students -s /bin/bash student1
+sudo useradd -m -G developers,sudo -s /bin/bash dev1
+sudo useradd -m -G managers -s /bin/bash manager1
+
+echo 'student1:exam123' | sudo chpasswd
+echo 'dev1:exam123' | sudo chpasswd
+echo 'manager1:exam123' | sudo chpasswd
+
+6.3. Настройка прав доступа
+
+sudo mkdir -p /opt/shared/public /opt/shared/developers /opt/shared/managers
+sudo chown :developers /opt/shared/developers
+sudo chown :managers /opt/shared/managers
+sudo chmod 770 /opt/shared/developers
+sudo chmod 770 /opt/shared/managers
+sudo chmod 777 /opt/shared/public
+
+================================================================================
+
+7. НАСТРОЙКА СЕТЕВЫХ СЛУЖБ
+
+7.1. Настройка SSH сервера
+
+sudo apt install -y openssh-server
+sudo systemctl enable ssh
+sudo systemctl start ssh
+
+Проверка статуса:
+systemctl status ssh
+
+Подключение:
+ssh user1@<IP_АДРЕС>
+
+7.2. Настройка общей папки VirtualBox
+
+sudo apt install -y virtualbox-guest-utils
+sudo usermod -aG vboxsf $USER
+mkdir ~/shared_exam
+sudo mount -t vboxsf exam_share ~/shared_exam
+
+================================================================================
+
+8. МОНИТОРИНГ СИСТЕМЫ
+
+8.1. Системные журналы
+
+systemctl status systemd-journald
+journalctl -b
+journalctl -u ssh
+journalctl -p err
+
+8.2. Мониторинг ресурсов
+
+htop
+
+================================================================================
+
+9. СОЗДАНИЕ ISO-ОБРАЗА
+
+sudo apt install -y genisoimage
+mkdir ~/iso-exam
+cp -r ~/Documents/exam/* ~/iso-exam/ || echo 'Нет файлов для копирования'
+cd ~/iso-exam
+mkisofs -o ~/shared_exam/exam.iso -V EXAM_ISO .
+
+================================================================================
+
+10. ЗАКЛЮЧЕНИЕ
+
+В ходе выполнения экзаменационного задания были успешно выполнены все поставленные задачи по настройке и администрированию Ubuntu. Система полностью функциональна и готова к использованию.
+
+================================================================================
+
+ПРИЛОЖЕНИЕ: Основные команды
+
+Обновление системы:
+sudo apt update && sudo apt upgrade -y
+
+Установка пакетов:
+sudo apt install имя_пакета
+
+Просмотр IP адреса:
+ip addr
+
+Создание пользователя:
+sudo useradd -m -G группа -s /bin/bash имя_пользователя
+
+Создание группы:
+sudo groupadd имя_группы
+
+Просмотр журналов:
+journalctl -b
+
+Монтирование общей папки VirtualBox:
+sudo mount -t vboxsf имя_папки точка_монтирования
+
+Создание резервной копии Borg:
+borg create репозиторий::имя_копии путь_к_файлам
+
+================================================================================
