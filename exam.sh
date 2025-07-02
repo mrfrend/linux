@@ -172,7 +172,6 @@ task_4_shared_folder() {
 
     echo "Установка Guest Additions..."
     execute_command "sudo apt install -y virtualbox-guest-utils"
-    execute_command "sudo systemctl enable vboxservice"
     execute_command "sudo usermod -aG vboxsf $USER"
 
     echo -e "\nСоздание точки монтирования..."
