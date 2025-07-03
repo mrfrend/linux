@@ -78,7 +78,7 @@ task_1_system_update() {
     execute_command "sudo apt update && sudo apt upgrade -y"
 
     echo -e "\nУстановка базового ПО..."
-    execute_command "sudo apt install -y firefox chromium-browser libreoffice gimp inkscape vlc mpv git wget curl htop neofetch mc ranger zip unzip p7zip-full ntfs-3g dosfstools"
+    execute_command "sudo apt install -y firefox libreoffice gimp inkscape vlc mpv git wget curl htop neofetch mc ranger zip unzip p7zip-full ntfs-3g dosfstools"
 
     save_state "task_1_complete"
     print_success "Система обновлена и базовое ПО установлено"
